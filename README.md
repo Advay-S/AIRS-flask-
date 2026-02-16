@@ -1,3 +1,3 @@
-# AIRS Flask
+# AIRS-flask - AI Resume Shortlisting Application
 
-This is the initial commit for the AIRS Flask project.
+Flask migration in progress...

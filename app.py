@@ -1,6 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 app = Flask(__name__)
 app.config.from_object(Config)

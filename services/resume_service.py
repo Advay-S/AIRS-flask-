@@ -1,9 +1,12 @@
 from typing import List, Dict
+import logging
 import numpy as np
 from werkzeug.datastructures import FileStorage
 from sqlalchemy import text
 from services.document_parser import DocumentParser
 from services.embedding_service import get_embedding_service
+
+logger = logging.getLogger(__name__)
 
 class ResumeService:
     """Handle resume processing and matching"""
@@ -29,27 +32,27 @@ class ResumeService:
         Returns:
             Dictionary with success message and extracted text preview
         """
-        print("--- CHECKPOINT 1: Service started ---")
+        logger.info("Resume processing started")
         
         try:
-            print("--- CHECKPOINT 2: Getting Stream ---")
             filename = file.filename
+            logger.debug(f"Processing file: {filename}")
             
-            print("--- CHECKPOINT 3: Calling Parser ---")
+            logger.debug("Extracting text from document")
             raw_text = self.parser.extract_from_stream(file.stream, filename)
             
             if not raw_text or len(raw_text.strip()) == 0:
                 raise ValueError("No text could be extracted from the document")
             
-            print(f"--- CHECKPOINT 4: Text extracted ({len(raw_text)} chars) ---")
+            logger.info(f"Text extracted successfully: {len(raw_text)} characters")
             
-            print("--- CHECKPOINT 5: Generating embeddings ---")
+            logger.debug("Generating embeddings")
             vectors = self.embedding_service.return_embeds(raw_text)
             
             # Convert numpy array to list for PostgreSQL
             vec_list = vectors.tolist()
             
-            print("--- CHECKPOINT 6: Inserting into db! ---")
+            logger.debug("Saving to database")
             sql = text("""
                 INSERT INTO candidate_profiles (full_text, embedding) 
                 VALUES (:text, :embedding::vector)
@@ -61,8 +64,8 @@ class ResumeService:
             })
             self.db.commit()
             
-            print("--- SUCCESS: Saved to Postgres! ---")
-            print(f"Extracted text preview: {raw_text[:200]}...")
+            logger.info("Resume saved successfully to database")
+            logger.debug(f"Text preview: {raw_text[:200]}...")
             
             return {
                 'message': 'Resume processed successfully!',
@@ -73,8 +76,7 @@ class ResumeService:
             
         except Exception as e:
             self.db.rollback()
-            print(f"--- CRASH REPORT ---")
-            print(f"Error: {str(e)}")
+            logger.error(f"Failed to process resume: {str(e)}", exc_info=True)
             raise RuntimeError(f"Failed to process resume: {str(e)}")
     
     def find_matching_resumes(self, job_description: str, limit: int = 20) -> List[Dict]:
@@ -88,7 +90,7 @@ class ResumeService:
         Returns:
             List of matching resumes with scores
         """
-        print(f"Received Job Description: {job_description[:100]}...")
+        logger.info(f"Finding matching resumes for job description: {job_description[:100]}...")
         
         if not job_description or len(job_description.strip()) == 0:
             raise ValueError("Job description cannot be empty")

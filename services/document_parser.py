@@ -31,7 +31,7 @@ class DocumentParser:
                 # Try PDF as default
                 try:
                     return DocumentParser._extract_pdf(file_stream)
-                except:
+                except Exception:
                     # Fallback to text
                     return DocumentParser._extract_txt(file_stream)
                 

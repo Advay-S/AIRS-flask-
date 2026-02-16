@@ -2,6 +2,12 @@
 
 A Flask-based application for intelligent resume screening and matching using AI embeddings and vector similarity search.
 
+## 📚 Documentation
+
+- **[TESTING.md](TESTING.md)** - Complete testing guide for Users and HR
+- **[FEATURES.md](FEATURES.md)** - Detailed feature documentation and specifications
+- **[test_examples/](test_examples/)** - Ready-to-run test scripts
+
 ## 🚀 Features
 
 - **Resume Upload & Processing**: Extract text from PDF, DOCX, and TXT files
@@ -198,7 +204,9 @@ AIRS-flask-/
 ├── config.py                       # Configuration settings
 ├── requirements.txt                # Python dependencies
 ├── .gitignore                      # Git ignore patterns
-├── README.md                       # Documentation
+├── README.md                       # This file - Main documentation
+├── TESTING.md                      # Complete testing guide
+├── FEATURES.md                     # Detailed feature specifications
 ├── models/
 │   └── __init__.py                 # Models package
 ├── services/
@@ -209,8 +217,12 @@ AIRS-flask-/
 ├── routes/
 │   ├── __init__.py                 # Routes package
 │   └── resume_routes.py            # API endpoints
-└── database/
-    └── init.sql                    # Database schema
+├── database/
+│   └── init.sql                    # Database schema
+└── test_examples/
+    ├── README.md                   # Test scripts documentation
+    ├── quick_test.sh               # Bash test script
+    └── test_api.py                 # Python test script
 ```
 
 ## 🔧 Configuration
@@ -224,7 +236,20 @@ Edit `config.py` to customize:
 
 ## 🧪 Testing the Application
 
-### Test Resume Upload:
+For comprehensive testing instructions, see **[TESTING.md](TESTING.md)**.
+
+### Quick Test:
+
+```bash
+# Use the automated test script
+cd test_examples
+./quick_test.sh
+
+# Or use the Python test suite
+python test_api.py
+```
+
+### Manual Test - Resume Upload:
 
 ```bash
 # Create a sample resume
@@ -238,7 +263,7 @@ curl -X POST http://localhost:5000/api/resumecontroller/upload \
   -F "file=@sample_resume.txt"
 ```
 
-### Test Resume Matching:
+### Manual Test - Resume Matching:
 
 ```bash
 curl -X POST http://localhost:5000/api/resumecontroller/match \
@@ -247,6 +272,11 @@ curl -X POST http://localhost:5000/api/resumecontroller/match \
     "jobDescription": "Python developer with database experience"
   }'
 ```
+
+### For Complete Testing Guide:
+- **As a User (Candidate)**: See [Testing as a User](TESTING.md#testing-as-a-user-candidate)
+- **As HR/Recruiter**: See [Testing as HR](TESTING.md#testing-as-hrrecruiter)
+- **Complete Workflow**: See [Complete Testing Workflow](TESTING.md#complete-testing-workflow)
 
 ## 🔍 How It Works
 

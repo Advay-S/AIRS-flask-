@@ -72,13 +72,18 @@ Create a `.env` file for custom configuration:
 
 ```bash
 DATABASE_URL=postgresql://postgres:password@localhost:5432/resume_db
+FLASK_DEBUG=True  # Set to False in production for security
 ```
+
+**Security Note:** Debug mode should NEVER be enabled in production as it can expose sensitive information and allow arbitrary code execution.
 
 ## 🚀 Running the Application
 
 ### Development mode:
 
 ```bash
+# Enable debug mode for development
+export FLASK_DEBUG=True
 python app.py
 ```
 
@@ -87,6 +92,8 @@ The application will start on `http://0.0.0.0:5000`
 ### Production mode with Gunicorn:
 
 ```bash
+# Disable debug mode in production (default)
+export FLASK_DEBUG=False
 gunicorn -w 4 -b 0.0.0.0:5000 app:app
 ```
 

@@ -32,4 +32,7 @@ def index():
     }
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Debug mode controlled by FLASK_DEBUG environment variable
+    # In production, set FLASK_DEBUG=False or use gunicorn
+    debug_mode = app.config.get('DEBUG', False)
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)

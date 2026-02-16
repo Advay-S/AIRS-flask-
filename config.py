@@ -3,6 +3,9 @@ import os
 class Config:
     """Application configuration"""
     
+    # Debug mode (should be False in production)
+    DEBUG = os.getenv('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')
+    
     # Database
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',

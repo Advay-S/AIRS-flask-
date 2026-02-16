@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from routes.resume_routes import resume_bp
 from config import Config
 
 app = Flask(__name__)
@@ -9,7 +8,8 @@ app.config.from_object(Config)
 # Initialize database
 db = SQLAlchemy(app)
 
-# Register blueprints
+# Import and register blueprints after db initialization to avoid circular imports
+from routes.resume_routes import resume_bp
 app.register_blueprint(resume_bp, url_prefix='/api/resumecontroller')
 
 @app.route('/')
